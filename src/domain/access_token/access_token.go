@@ -1,4 +1,4 @@
-package acess_token
+package access_token
 
 import (
 	"time"
@@ -9,7 +9,7 @@ const (
 )
 
 type AccessToken struct {
-	AccessToken string `json:"access_token`
+	AccessToken string `json:"access_token"`
 	UserId      int64  `json:"user_id"`
 	ClientId    int64  `json:"client_id"`
 	Expires     int64  `json:"expires"`
