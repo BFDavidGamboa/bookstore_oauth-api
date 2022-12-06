@@ -20,7 +20,7 @@ type AccessToken struct {
 
 func (at *AccessToken) Validate() *errors.RestErr {
 	at.AccessToken = strings.TrimSpace(at.AccessToken)
-	if len(at.AccessToken) == 0 {
+	if at.AccessToken == "" {
 		return errors.NewBadRequestError("invalid access token id")
 	}
 	if at.UserId <= 0 {

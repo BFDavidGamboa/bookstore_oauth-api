@@ -18,9 +18,11 @@ func StartApplication() {
 		panic(dbErr)
 	}
 	session.Close()
-	repo := db.NewRepository()
-	// atHandler := http.NewAccessTokenHandler(access_token.NewService(db.NewRepository()))
-	atHandler := http.NewAccessTokenHandler(access_token.NewService(repo))
+
+	dbRepo := db.NewRepository()
+	accTkn := access_token.NewService(dbRepo)
+	atHandler := http.NewAccessTokenHandler(accTkn)
+	//  atHandler := http.NewAccessTokenHandler(access_token.NewService(db.NewRepository()))
 
 	router.GET("/oauth/access_token/:access_token_id", atHandler.GetById)
 	router.POST("/oauth/access_token", atHandler.Create)
