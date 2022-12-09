@@ -8,8 +8,21 @@ import (
 )
 
 const (
-	expirationTime = 24
+	expirationTime             = 24
+	grantTypePassword          = "password"
+	grandTypeClientCredentials = "client_credentials"
 )
+
+type AccessTokenRequest struct {
+	GranType string `json:"grant_type"`
+	Scope    string `json:"scope"`
+
+	Username string `json:"username"`
+	Password string `json:"password"`
+
+	ClientId     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+}
 
 type AccessToken struct {
 	AccessToken string `json:"access_token"`
@@ -32,6 +45,21 @@ func (at *AccessToken) Validate() *errors.RestErr {
 	if at.Expires <= 0 {
 		return errors.NewBadRequestError("invalid expiration time")
 	}
+	return nil
+}
+
+func (at *AccessTokenRequest) Validate() *errors.RestErr {
+	switch at.GranType {
+	case grantTypePassword:
+		break
+
+	case grandTypeClientCredentials:
+		break
+
+	default:
+		return errors.NewBadRequestError("invalid grant_type parameter")
+	}
+
 	return nil
 }
 
