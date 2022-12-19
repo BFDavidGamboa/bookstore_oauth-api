@@ -38,17 +38,15 @@ func (r *usersRepository) LoginUser(email string, password string) (*users.User,
 	fmt.Println(string(bytes))
 	response := usersRestClient.Post("/users/login", request)
 	if response == nil || response.Response == nil {
-		err := errors.New("Could not receive valid response from client")
+		err := errors.New("could not receive valid response from client")
 		return nil, rest_errors.NewInternalServerError("invalid restClient response when trying to login user ", err)
 	}
 	if response.StatusCode > 299 {
-		fmt.Println(response.String())
-		var restErr rest_errors.RestErr
-		err := json.Unmarshal(response.Bytes(), &restErr)
+		apiErr, err := rest_errors.NewRestErrorFromBytes(response.Bytes())
 		if err != nil {
-			return nil, rest_errors.NewInternalServerError("invalid error interface when trying to login user", err)
+			return nil, rest_errors.NewInternalServerError("invalid error interface when trying to login user", apiErr)
 		}
-		return nil, restErr
+		return nil, apiErr
 	}
 
 	var user users.User
